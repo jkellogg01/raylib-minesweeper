@@ -7,6 +7,8 @@
 #define COLS 10
 #define ROWS 10
 
+#define NUM_BOMBS 10
+
 const int screen_width = 400;
 const int screen_height = 400;
 
@@ -38,11 +40,21 @@ int main(void) {
     }
   }
 
+  for (int i = 0; i < NUM_BOMBS; i++) {
+    int col = rand() % COLS;
+    int row = rand() % ROWS;
+    if (grid[col][row].contains_mine) {
+      i--;
+      continue;
+    }
+    grid[col][row].contains_mine = true;
+  }
+
   while (!WindowShouldClose()) {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
       Vector2 mouse_pos = GetMousePosition();
-      int mouse_row = floor(mouse_pos.y) / cell_height;
-      int mouse_col = floor(mouse_pos.x) / cell_width;
+      int mouse_row = round(mouse_pos.y) / cell_height;
+      int mouse_col = round(mouse_pos.x) / cell_width;
       grid[mouse_col][mouse_row].revealed = true;
     }
 
@@ -66,6 +78,7 @@ int main(void) {
 void cell_draw(Cell cell) {
   DrawRectangleLines(cell.pos.x, cell.pos.y, cell_width, cell_height, BLACK);
   if (cell.revealed) {
-    DrawRectangle(cell.pos.x + 4, cell.pos.y + 4, cell_width - 8, cell_height - 8, MAROON);
+    DrawRectangle(cell.pos.x + 4, cell.pos.y + 4, cell_width - 8,
+                  cell_height - 8, cell.contains_mine ? MAROON : GREEN);
   }
 }
