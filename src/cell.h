@@ -24,4 +24,6 @@ void grid_init(Grid* grid, int width, int height);
 void grid_draw(Grid* grid);
 void grid_reveal(Grid* grid, int x, int y);
 
+int cell_adjacent_mines(Cell cell, Grid* grid);
+
 #endif
