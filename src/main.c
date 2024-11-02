@@ -3,8 +3,6 @@
 #include "cell.h"
 #include "raylib.h"
 
-#define NUM_BOMBS 10
-
 const int screen_width = 400;
 const int screen_height = 400;
 
@@ -13,6 +11,7 @@ int main(void) {
 
     Grid grid;
     grid_init(&grid, screen_width, screen_height);
+    grid_populate(&grid, 10);
 
     while (!WindowShouldClose()) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {

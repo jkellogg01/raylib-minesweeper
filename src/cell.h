@@ -23,6 +23,7 @@ typedef struct {
 void grid_init(Grid* grid, int width, int height);
 void grid_draw(Grid* grid);
 void grid_reveal(Grid* grid, int x, int y);
+void grid_populate(Grid* grid, int mines);
 
 int cell_adjacent_mines(Cell cell, Grid* grid);
 

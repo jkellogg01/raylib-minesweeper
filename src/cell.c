@@ -1,6 +1,8 @@
 #include "cell.h"
-#include <raylib.h>
+#include "raylib.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define CELL_PADDING 4
 
@@ -38,6 +40,15 @@ static void cell_draw(Cell cell, int width, int height, int adjacent) {
     DrawRectangle(cell.x + CELL_PADDING / 2, cell.y + CELL_PADDING / 2,
                   width - CELL_PADDING, height - CELL_PADDING,
                   cell.has_mine ? MAROON : GREEN);
+
+    if (adjacent <= 0) {
+        return;
+    }
+
+    const char* str_adjacent = TextFormat("%1d", adjacent);
+    DrawText(str_adjacent,
+             (cell.x + width / 2) - (MeasureText(str_adjacent, height - 4) / 2),
+             cell.y + 2, height - 4, BLACK);
 }
 
 void grid_draw(Grid* grid) {
@@ -60,6 +71,20 @@ static Cell* grid_at(Grid* grid, int x, int y) {
 
 void grid_reveal(Grid* grid, int x, int y) {
     grid_at(grid, x, y)->revealed = true;
+}
+
+void grid_populate(Grid* grid, int mines) {
+    srand(time(0));
+    while (mines > 0) {
+        int x = rand() % grid->width;
+        int y = rand() % grid->height;
+        Cell* cell = grid_at(grid, x, y);
+        if (cell->has_mine) {
+            continue;
+        }
+        cell->has_mine = true;
+        mines -= 1;
+    }
 }
 
 int cell_adjacent_mines(Cell cell, Grid* grid) {
